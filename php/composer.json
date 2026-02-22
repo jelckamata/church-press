@@ -1,0 +1,23 @@
+{
+    "name": "jelckama/church-press",
+    "description": "",
+    "type": "project",
+    "version": "0.1",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "JELCKamata ICT Team and Haruka Sato",
+            "email": "hal.ict@jelckama.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "JELCKamata\\ChurchPress\\": ""
+        }
+    },
+    "require": {
+        "php": ">=8.1"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
