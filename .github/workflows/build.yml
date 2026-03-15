@@ -1,0 +1,64 @@
+name: Build pure package
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP + Composer
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          tools: composer
+
+      # --- build/some-other を新造 ---
+      - name: Prepare output directory
+        run: |
+          rm -rf build/church-press
+          mkdir -p build
+          rsync -a php/ build/church-press/
+
+      # --- vendor 同梱ビルド ---
+      - name: Install production dependencies
+        working-directory: build/church-press
+        run: |
+          composer install \
+            --no-dev \
+            --classmap-authoritative \
+            --optimize-autoloader \
+            --no-interaction \
+            --prefer-dist
+
+      # --- 不要物除去（任意） ---
+      - name: Remove dev files
+        run: |
+          rm -rf build/church-press/.git || true
+          rm -rf build/church-press/tests || true
+          rm -rf build/church-press/.github || true
+          rm -f  build/church-press/phpunit.xml* || true
+
+      # --- 成果物保存 ---
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: some-other
+          path: build/church-press
+      - name: Create ZIP archive
+        run: |
+          cd build
+          zip -r church-press.zip church-press
+
+      - name: Upload ZIP
+        uses: actions/upload-artifact@v4
+        with:
+          name: some-other-zip
+          path: build/church-press.zip
