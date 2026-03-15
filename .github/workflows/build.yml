@@ -24,7 +24,9 @@ jobs:
       - name: Prepare output directory
         run: |
           rm -rf build/church-press
+          rm -rf dest
           mkdir -p build
+          mkdir -p dest
           rsync -a php/ build/church-press/
 
       # --- vendor 同梱ビルド ---
@@ -47,18 +49,12 @@ jobs:
           rm -f  build/church-press/phpunit.xml* || true
 
       # --- 成果物保存 ---
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: some-other
-          path: build/church-press
       - name: Create ZIP archive
         run: |
-          cd build
-          zip -r church-press.zip church-press
+          zip -r dest/church-press.zip build/church-press
 
       - name: Upload ZIP
         uses: actions/upload-artifact@v4
         with:
-          name: some-other-zip
-          path: build/church-press.zip
+          name: church-press-zip
+          path: dest/church-press.zip
