@@ -49,6 +49,8 @@ jobs:
           rm -rf build/church-press/composer.json || true
           rm -rf build/church-press/composer.lock || true
           rm -f  build/church-press/phpunit.xml* || true
+          cp LICENSE build/church-press/
+          cp README.md build/church-press/
 
       # --- 成果物保存 ---
       - name: Create ZIP archive
@@ -62,3 +64,9 @@ jobs:
         with:
           name: church-press.zip
           path: dest/church-press.zip
+
+      # 🏆 Release に添付
+      - name: Upload to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dest/church-press.zip
