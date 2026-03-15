@@ -51,10 +51,12 @@ jobs:
       # --- 成果物保存 ---
       - name: Create ZIP archive
         run: |
-          zip -r dest/church-press.zip build/church-press
+          cd build/church-press
+          zip -r ../../dest/church-press.zip .
+          cd ../../
 
       - name: Upload ZIP
         uses: actions/upload-artifact@v4
         with:
-          name: church-press-zip
+          name: church-press.zip
           path: dest/church-press.zip
